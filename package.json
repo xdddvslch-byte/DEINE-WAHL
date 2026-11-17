@@ -1,0 +1,48 @@
+{
+  "name": "deine-wahl",
+  "productName": "DEINE WAHL",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Інтерактивний тренажер службових етичних дилем",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win nsis --x64",
+    "portable:win": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "45.3.3",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "ua.deinewahl.trainer",
+    "files": [
+      "main.js",
+      "app.js",
+      "story.js",
+      "fx.js",
+      "index.html",
+      "style.css",
+      "fonts.css",
+      "glass.webp",
+      "glass-alpha.webp",
+      "mark.svg",
+      "terrain.svg",
+      "terrain-lit.svg"
+    ],
+    "artifactName": "DEINE-WAHL-Setup-${version}.${ext}",
+    "directories": {
+      "output": "dist"
+    },
+    "nsis": {
+      "createDesktopShortcut": "always",
+      "shortcutName": "DEINE WAHL"
+    },
+    "win": {
+      "icon": "icon.ico"
+    },
+    "portable": {
+      "artifactName": "DEINE-WAHL-Portable.exe"
+    }
+  }
+}

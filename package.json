@@ -1,12 +1,16 @@
 {
   "name": "deine-wahl",
   "productName": "DEINE WAHL",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "private": true,
-  "description": "Інтерактивний тренажер службових етичних дилем",
+  "description": "Симулятор етичних дилем для сектору безпеки та оборони: розгалужені сценарії в JSON, бали за трьома осями, груповий режим, SCORM",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "build": "node tools/build.mjs",
+    "check": "node tools/build.mjs --check",
+    "scorm": "node tools/build.mjs --scorm",
+    "serve": "npx --yes http-server -p 8080 -c-1 .",
     "dist:win": "electron-builder --win nsis --x64",
     "portable:win": "electron-builder --win portable --x64"
   },
@@ -17,18 +21,18 @@
   "build": {
     "appId": "ua.deinewahl.trainer",
     "files": [
+      "icon.ico",
       "main.js",
       "app.js",
-      "story.js",
+      "validate.js",
+      "scorm.js",
       "fx.js",
       "index.html",
       "style.css",
       "fonts.css",
-      "glass.webp",
-      "glass-alpha.webp",
-      "mark.svg",
-      "terrain.svg",
-      "terrain-lit.svg"
+      "data/**/*",
+      "assets/**/*",
+      "!assets/brand/logo-original.png"
     ],
     "artifactName": "DEINE-WAHL-Setup-${version}.${ext}",
     "directories": {
@@ -44,5 +48,6 @@
     "portable": {
       "artifactName": "DEINE-WAHL-Portable.exe"
     }
-  }
+  },
+  "license": "MIT"
 }

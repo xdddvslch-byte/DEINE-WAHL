@@ -1,0 +1,468 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "deine-wahl/stsenarii.schema.json",
+  "title": "Сценарій етичної дилеми — формат організаторів + розширення DEINE WAHL «podacha»",
+  "description": "Формат одного сценарію. Сценарій — граф вузлів рішення: кожен варіант дії має наслідки, бали за трьома вимірами, зворотний звʼязок, посилання на норми і, за потреби, наступний вузол (відкладені наслідки). Формат стартовий: команда може його розширити, але має пояснити зміни. Розширення команди DEINE WAHL: необовʼязкові поля «podacha» на рівні сценарію і вузла — сценічна подача (заголовок, репліка персонажа, варіант «інерції» для режиму тиску часу, питання для рефлексії). Без «podacha» сценарій повністю відповідає стартовому формату організаторів і відтворюється симулятором.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nazva",
+    "versiia",
+    "data_stvorennia",
+    "tema",
+    "audytoriia",
+    "tryvalist_khv",
+    "kontekst",
+    "diiovi_osoby",
+    "sytuatsiia",
+    "tsinnosti_v_konflikti",
+    "pochatkovyi_vuzol",
+    "vuzly",
+    "normy",
+    "zastosovnist",
+    "porady",
+    "pytannia_dlia_obhovorennia",
+    "dzherelo_vypadku",
+    "perevirka_zmistu",
+    "shi"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^S[0-9]{2}$",
+      "description": "Ідентифікатор сценарію"
+    },
+    "nazva": {
+      "type": "string",
+      "minLength": 3
+    },
+    "versiia": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "data_stvorennia": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Дата, на яку звірено редакції норм"
+    },
+    "tema": {
+      "type": "string",
+      "enum": [
+        "podarunok",
+        "konflikt-interesiv",
+        "vykryvach",
+        "akademichna-dobrochesnist",
+        "sluzhbove-maino",
+        "kadrovi-rishennia",
+        "neformalnyi-tysk",
+        "rozpodil-resursiv",
+        "pravdyvist-zvitiv",
+        "inshe"
+      ]
+    },
+    "audytoriia": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "tryvalist_khv": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 90,
+      "description": "Орієнтовна тривалість у груповому режимі з обговоренням, хвилин"
+    },
+    "kontekst": {
+      "type": "string",
+      "minLength": 20
+    },
+    "diiovi_osoby": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "rol",
+          "opys"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^R[0-9]+$"
+          },
+          "rol": {
+            "type": "string",
+            "description": "Посада або роль без імені"
+          },
+          "opys": {
+            "type": "string"
+          },
+          "hravets": {
+            "type": "boolean",
+            "description": "true — роль, яку грає користувач"
+          }
+        }
+      }
+    },
+    "sytuatsiia": {
+      "type": "string",
+      "minLength": 50
+    },
+    "tsinnosti_v_konflikti": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tsinnist_a",
+          "tsinnist_b",
+          "poiasnennia"
+        ],
+        "properties": {
+          "tsinnist_a": {
+            "type": "string"
+          },
+          "tsinnist_b": {
+            "type": "string"
+          },
+          "poiasnennia": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pochatkovyi_vuzol": {
+      "type": "string",
+      "pattern": "^V[0-9]+$"
+    },
+    "vuzly": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/vuzol"
+      }
+    },
+    "normy": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "yak_zastosovuietsia"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Ідентифікатор із normy.json"
+          },
+          "yak_zastosovuietsia": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "zastosovnist": {
+      "type": "string",
+      "description": "На кого з дійових осіб поширюються наведені норми і що лишається спірним"
+    },
+    "porady": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pytannia_dlia_obhovorennia": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "dzherelo_vypadku": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typ",
+        "opys"
+      ],
+      "properties": {
+        "typ": {
+          "type": "string",
+          "enum": [
+            "вигаданий",
+            "знеособлений з практики"
+          ]
+        },
+        "opys": {
+          "type": "string"
+        }
+      }
+    },
+    "perevirka_zmistu": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fakhivets_dzpk",
+        "khto",
+        "data",
+        "prymitka"
+      ],
+      "properties": {
+        "fakhivets_dzpk": {
+          "type": "string",
+          "enum": [
+            "не проведено",
+            "проведено",
+            "проведено із зауваженнями"
+          ]
+        },
+        "khto": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Посада фахівця, без імені"
+        },
+        "data": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prymitka": {
+          "type": "string"
+        }
+      }
+    },
+    "shi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vykorystano",
+        "instrument",
+        "shcho_zrobleno",
+        "perevirka_liudynoiu"
+      ],
+      "properties": {
+        "vykorystano": {
+          "type": "boolean"
+        },
+        "instrument": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "shcho_zrobleno": {
+          "type": "string"
+        },
+        "perevirka_liudynoiu": {
+          "type": "string"
+        }
+      }
+    },
+    "podacha": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Розширення DEINE WAHL: подача на обкладинці (необовʼязково)",
+      "properties": {
+        "nomer": {
+          "type": "string",
+          "description": "Номер справи на вкладці"
+        },
+        "tema_korotko": {
+          "type": "string"
+        },
+        "zagolovok": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "type": "string"
+          },
+          "description": "1–2 рядки заголовка обкладинки"
+        },
+        "knopka": {
+          "type": "string",
+          "description": "Текст кнопки старту"
+        },
+        "ikonka": {
+          "type": "string",
+          "enum": [
+            "phone",
+            "box",
+            "play"
+          ]
+        },
+        "mistse": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "baly": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dobrochesnist",
+        "efektyvnist",
+        "dovira"
+      ],
+      "description": "Бали за трьома вимірами від -2 до +2. Не зводяться в одну суму і не визначають «правильний» варіант.",
+      "properties": {
+        "dobrochesnist": {
+          "type": "integer",
+          "minimum": -2,
+          "maximum": 2
+        },
+        "efektyvnist": {
+          "type": "integer",
+          "minimum": -2,
+          "maximum": 2
+        },
+        "dovira": {
+          "type": "integer",
+          "minimum": -2,
+          "maximum": 2
+        }
+      }
+    },
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "tekst",
+        "naslidky",
+        "baly",
+        "chomu_taki_baly",
+        "zvorotnyi_zviazok",
+        "normy",
+        "nastupnyi_vuzol"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z][0-9]?$"
+        },
+        "tekst": {
+          "type": "string"
+        },
+        "naslidky": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "odrazu",
+            "vidkladeni"
+          ],
+          "properties": {
+            "odrazu": {
+              "type": "string"
+            },
+            "vidkladeni": {
+              "type": "string"
+            }
+          }
+        },
+        "baly": {
+          "$ref": "#/$defs/baly"
+        },
+        "chomu_taki_baly": {
+          "type": "string"
+        },
+        "zvorotnyi_zviazok": {
+          "type": "string",
+          "description": "Описує рішення і його наслідки, а не особу"
+        },
+        "normy": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nastupnyi_vuzol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^V[0-9]+$"
+        }
+      }
+    },
+    "vuzol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "tekst",
+        "zapytannia",
+        "varianty"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^V[0-9]+$"
+        },
+        "tekst": {
+          "type": "string",
+          "description": "Що відбувається на цьому кроці (для першого вузла може бути порожнім — тоді показують sytuatsiia)"
+        },
+        "zapytannia": {
+          "type": "string"
+        },
+        "varianty": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/variant"
+          }
+        },
+        "podacha": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Розширення DEINE WAHL: подача кроку (необовʼязково)",
+          "properties": {
+            "zagolovok": {
+              "type": "string",
+              "description": "Заголовок сцени"
+            },
+            "khto": {
+              "type": "string",
+              "description": "Хто говорить (роль)"
+            },
+            "replika": {
+              "type": "string",
+              "description": "Репліка персонажа — показується великим курсивом"
+            },
+            "inertsiia": {
+              "type": "string",
+              "pattern": "^[A-Z][0-9]?$",
+              "description": "id варіанта, що «стається сам», коли в режимі тиску вийшов час"
+            },
+            "inertsiia_tekst": {
+              "type": "string"
+            },
+            "rozdum": {
+              "type": "string",
+              "description": "Питання для рефлексії, якщо маршрут завершився тут"
+            }
+          }
+        }
+      }
+    }
+  }
+}

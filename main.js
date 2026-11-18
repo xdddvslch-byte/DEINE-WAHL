@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 const path = require('node:path');
 
 function openTrainer() {
@@ -7,10 +7,15 @@ function openTrainer() {
     width: 1160,
     height: 800,
     backgroundColor: '#05070a',
+    icon: path.join(__dirname, 'icon.ico'),
     autoHideMenuBar: true,
     webPreferences: { sandbox: true, contextIsolation: true, nodeIntegration: false }
   });
-  window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  // Нові вікна в застосунку не відкриваються. Посилання на чинну редакцію закону — у системному браузері.
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https:\/\/zakon\.rada\.gov\.ua\//.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
   window.loadFile(path.join(__dirname, 'index.html'));
 }
 

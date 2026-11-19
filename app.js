@@ -21,7 +21,7 @@ const AXES = [
 ];
 const REVIEW_LABEL = { 'проведено': 'переглянуто фахівцем ДЗПК', 'проведено із зауваженнями': 'переглянуто фахівцем ДЗПК із зауваженнями', 'не проведено': 'перегляд фахівцем ДЗПК ще не проведено' };
 const REVIEW_DOT = { 'проведено': 'reviewed', 'проведено із зауваженнями': 'reviewed', 'не проведено': 'pending' };
-const ZV = { 'zvireno': 'звірено з першоджерелом', 'zvireno-rekomendatsiinyi': 'звірено; рекомендаційний акт', 'ne-zvireno': 'не звірено — не наводиться як певна норма' };
+const ZV = { 'zvireno': 'звірено з першоджерелом', 'zvireno-rekomendatsiinyi': 'звірено; рекомендаційний акт', 'zvireno-vtorynne': 'звірено за вторинними джерелами; редакцію уточнити', 'ne-zvireno': 'не звірено — не наводиться як певна норма' };
 const TEMA = { 'podarunok': 'Подарунок', 'konflikt-interesiv': 'Конфлікт інтересів', 'vykryvach': 'Повідомлення про порушення', 'akademichna-dobrochesnist': 'Академічна доброчесність',
  'sluzhbove-maino': 'Службове майно', 'kadrovi-rishennia': 'Кадрові рішення', 'neformalnyi-tysk': 'Неформальний тиск', 'rozpodil-resursiv': 'Розподіл ресурсів', 'pravdyvist-zvitiv': 'Правдивість звітів', 'inshe': 'Інше' };
 // «Тест із пʼяти перевірок» — Посібник CIDS (2025), розділ 4.2. Короткий переказ.
@@ -114,6 +114,7 @@ function normalize(s, kind) {
    speaker: p.khto || null, quote: p.replika || null,
    rush: pi >= 0 ? pi : inertiaRule(v.varianty), rushByRule: pi < 0,
    rushNote: p.inertsiia_tekst || null, reflection: p.rozdum || null,
+   dovidka: p.dovidka || null,
    options: v.varianty.map(x => ({
     id: x.id, text: x.tekst, effect: x.naslidky.odrazu, later: x.naslidky.vidkladeni,
     scores: { integrity: x.baly.dobrochesnist, effectiveness: x.baly.efektyvnist, trust: x.baly.dovira },
@@ -328,6 +329,7 @@ function render() {
     <h2 class="sceneTitle${node.quote ? '' : ' q'}" id="scene-title" tabindex="-1">${h(node.title)}</h2>
     ${node.context ? `<p class="context${node.quote ? '' : ' long'}">${h(node.context)}</p>` : ''}
     ${node.quote ? `<figure class="dialogue"><figcaption class="speaker">${h(node.speaker || '')}</figcaption><blockquote class="speech">${say(quote)}</blockquote></figure>` : ''}
+    ${node.dovidka ? `<aside class="dovidka" aria-label="Правова довідка"><p class="dv-head"><span class="dv-tag">Довідка</span>${h(node.dovidka.zagolovok)}</p><p>${h(node.dovidka.tekst)}</p><p class="dv-norms">${node.dovidka.normy.map(n => `<span title="${h(NORMS[n] ? NORMS[n].akt : '')}">${h(NORMS[n] ? NORMS[n].akt.split(' від ')[0].replace('Закон України ', 'ЗУ ') + ', ' + normShort(n) : n)}</span>`).join('')}</p></aside>` : ''}
     <section class="responses${node.quote ? '' : ' plain'}" style="--cd:${cd}ms" aria-labelledby="choice-heading">
      <h3 id="choice-heading">${h(state.group ? 'Голосування аудиторії' : node.ask || 'Твоя відповідь')}<span class="keys" aria-hidden="true">клавіші 1–${n}</span><button class="cids-btn" aria-expanded="false" aria-controls="cids">Тест із 5 перевірок</button></h3>
      <ol class="cids" id="cids" hidden>${CIDS_TEST.map(([t, q]) => `<li><b>${t}.</b> ${q}</li>`).join('')}<li class="src">Посібник з вирішення дилем на робочому місці у державному секторі (CIDS, 2025), розділ 4.2.</li></ol>

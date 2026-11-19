@@ -103,6 +103,10 @@ function validateScenario(s, opts) {
   });
   const pd = vz.podacha;
   if (pd && pd.inertsiia && !vs.some(x => x.id === pd.inertsiia)) errors.push(`${P}, вузол ${vz.id}: podacha.inertsiia «${pd.inertsiia}» — такого варіанта у вузлі немає.`);
+  if (pd && pd.dovidka) pd.dovidka.normy.forEach(n => {
+   if (!normy[n]) errors.push(`${P}, вузол ${vz.id}: довідка посилається на відсутню норму ${n}.`);
+   else if (!sNorm.has(n)) errors.push(`${P}, вузол ${vz.id}: норма ${n} з довідки не наведена в normy сценарію.`);
+  });
   if (pd && (pd.replika && !pd.khto)) warnings.push(`${P}, вузол ${vz.id}: є репліка, але не вказано, хто говорить (podacha.khto).`);
  });
  if (s.perevirka_zmistu.fakhivets_dzpk === 'не проведено') warnings.push(`${P}: перегляд фахівцем з питань запобігання корупції ще не проведено.`);

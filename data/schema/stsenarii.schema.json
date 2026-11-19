@@ -459,6 +459,30 @@
             "rozdum": {
               "type": "string",
               "description": "Питання для рефлексії, якщо маршрут завершився тут"
+            },
+            "dovidka": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "zagolovok",
+                "tekst",
+                "normy"
+              ],
+              "description": "Розширення DEINE WAHL: правова довідка на екрані кроку (над варіантами відповіді)",
+              "properties": {
+                "zagolovok": {
+                  "type": "string"
+                },
+                "tekst": {
+                  "type": "string"
+                },
+                "normy": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
             }
           }
         }

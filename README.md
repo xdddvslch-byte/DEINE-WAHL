@@ -22,7 +22,7 @@
 
 ## 3. Демонстрація
 
-- Відео (до 3 хв): **[посилання YouTube/Google Drive — додати]**
+- Відео (до 3 хв): https://youtu.be/lNl0p6D4urc?si=uGPKIXSoqLuRaBHP
 - Робоча версія (Netlify): - https://deine-wahl.netlify.app/
 
 ## 4. Як запустити
